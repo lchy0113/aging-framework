@@ -1,0 +1,45 @@
+smartthings:
+  token:  # YOUR_PERSONAL_ACCESS_TOKEN
+
+  ssl:
+    verify: false
+    ca_cert: "./certs/xxxxxxxxxxxxxxxxxxx.crt" # "./xxxxxxxxxxxxxxxxxxx.crt" # Path to your CA certificate file
+
+  devices:
+    main_plug:
+      device_id:  # YOUR_DEVICE_ID
+      component: "main"
+
+power:
+  controller: "smartthings"
+  device: "main_plug"
+
+aging:
+  max_count: 10000
+  power_off_delay_sec: 5
+  boot_wait_sec: 0
+  interval_sec: 3
+  stop_on_fail: true
+
+serial:
+  port: "/dev/ttyUSB0"
+  baudrate: 115200
+  timeout_sec: 1
+
+ilitek:
+  boot_timeout_sec: 90
+
+  fail_patterns:
+    - "GET_PTL_VER"
+    - "unrecognized protocol ver"
+    - "api_update_ts_info failed"
+    - "driver initialize failed"
+    - "failed to execute cmd"
+    - "GET_PTL_VER err"
+
+  pass_patterns:
+    - "ILITEK"
+    - "input:"
+
+report:
+  save_dir: "reports"
