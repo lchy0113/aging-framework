@@ -1,8 +1,16 @@
 # aging-framework
 
-SmartThings API 기반 전원 제어와 UART/ADB 로그 감시를 조합해 Aging Test를 수행하는 Python Framework.
+SmartThings API 기반 전원 제어와 UART/ADB 로그 감시를 조합하여 Android Embedded Platform의 Aging Test를 수행하는 Python Framework.
 
-## 1. venv 구성
+현재 지원하는 Scenario
+
+- Basic Power Cycle
+- ILITEK Boot Aging
+- eMMC Storage Aging
+
+---
+
+# 1. Python Virtual Environment
 
 ```bash
 python3 -m venv .venv
@@ -10,56 +18,162 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 2. 설정
+---
 
-`config/config.yaml`에 SmartThings token, device_id, serial port 설정.
+# 2. SmartThings 설정
 
+## config/.env 생성
+
+```bash
+SMARTTHINGS_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SMARTTHINGS_MAIN_PLUG_DEVICE_ID=e5ea13c4-6697-4d98-a750-86c3539a0c9e
+```
+
+`.env` 파일은 Git에 Commit하지 않는다.
+
+---
+
+## config/config.yaml
+
+SmartThings SSL 및 시험 환경만 설정한다.
 
 ```yaml
 smartthings:
   ssl:
     verify: false
     ca_cert: null
+
+power:
+  controller: smartthings
+  device: main_plug
 ```
 
-정상 CA 인증서를 사용할 경우:
+CA 인증서를 사용하는 경우
 
 ```yaml
 smartthings:
   ssl:
     verify: true
-    ca_cert: "./certs/xxxxxxxxxx.crt"
+    ca_cert: "./certs/KDONE_SSL_CERT.crt"
 ```
 
-## 3. PowerController 테스트
+---
+
+# 3. SmartPlug 테스트
 
 ```bash
-python scripts/test_power.py
+python3 scripts/test_plug.py
 ```
 
-## 4. Basic Power Cycle
+예상 결과
+
+```
+[TEST] Power OFF
+[SmartThings] status=200
+[TEST] Power ON
+[SmartThings] status=200
+```
+
+---
+
+# 4. Scenario 실행
+
+## Basic Power Cycle
 
 ```bash
-python main.py --scenario basic_power_cycle
+python3 main.py --scenario basic_power_cycle
 ```
 
-## 5. Serial 단독 테스트
+---
+
+## ILITEK Boot Aging
 
 ```bash
-python scripts/test_serial.py
+python3 main.py --scenario ilitek_boot
 ```
 
-## 6. ILITEK Boot Aging
+---
+
+## eMMC Storage Aging
 
 ```bash
-python main.py --scenario ilitek_boot
+python3 main.py --scenario emmc_storage
 ```
 
-## Report
+현재 수행 항목
 
-결과는 `reports/` 아래 CSV로 저장.
+- SmartPlug Power OFF / ON
+- Android Boot Complete 확인
+- eMMC Device 정보 수집
+- Read / Write Verify
+- SHA-256 무결성 확인
+- Kernel Storage Error 검사
+- CSV Report 저장
 
-## Logs
+---
 
-- `logs/raw/`: 회차별 UART 원본 로그
-- `logs/fail/`: 실패 회차 로그
+# 5. Utility
+
+## Serial Monitor
+
+```bash
+python3 scripts/test_serial.py
+```
+
+---
+
+## SmartPlug Test
+
+```bash
+python3 scripts/test_plug.py
+```
+
+---
+
+# 6. Report
+
+시험 결과는 `reports/`에 CSV 형식으로 저장된다.
+
+예
+
+```
+reports/
+ ├── basic_power_cycle_xxxxx.csv
+ ├── ilitek_boot_xxxxx.csv
+ └── emmc_storage_xxxxx.csv
+```
+
+---
+
+# 7. Log
+
+```
+logs/
+ ├── raw/
+ └── fail/
+```
+
+- **raw/** : 회차별 원본 로그
+- **fail/** : FAIL 발생 시 로그
+
+---
+
+# 8. eMMC Storage Scenario
+
+현재 검증 항목
+
+- Cold Boot
+- SmartPlug Power Cycle
+- eMMC Device Information
+- SHA-256 Data Integrity
+- Read / Write Test
+- Kernel Storage Error Detection
+
+향후 추가 예정
+
+- Random Power Cut During Write
+- Long Write Stress
+- Boot Time Trend Analysis
+- eMMC Health Monitoring
+- Factory Reset Test
+- OTA Validation

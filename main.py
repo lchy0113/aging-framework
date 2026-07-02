@@ -1,16 +1,25 @@
 import argparse
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# -------------------------------------------------
+# Load Environment Variables
+# -------------------------------------------------
+load_dotenv(Path("config/.env"))
+
 from core.config import Config
 from core.aging_runner import AgingRunner
 from controllers import create_power_controller
 from scenarios.basic_power_cycle import BasicPowerCycleScenario
 from scenarios.ilitek_boot import IlitekBootScenario
+from scenarios.emmc_storage import EmmcStorageScenario
 
 
 SCENARIOS = {
     "basic_power_cycle": BasicPowerCycleScenario,
     "ilitek_boot": IlitekBootScenario,
+    "emmc_storage": EmmcStorageScenario,
 }
 
 

@@ -1,6 +1,12 @@
 import sys
 import time
 from pathlib import Path
+from dotenv import load_dotenv
+
+# -------------------------------------------------
+# Load Environment Variables
+# -------------------------------------------------
+load_dotenv("config/.env")
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR))

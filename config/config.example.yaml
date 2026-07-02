@@ -1,15 +1,21 @@
 smartthings:
+  token: "5bd16763-d6e2-40ee-b9cf-e1a7087ecb89"
+
   ssl:
-    verify: false
-    ca_cert: "./certs/KDONE_SSL_CERT.crt"
-    timeout: 10
+    verify: false #true #false
+    ca_cert: "./certs/KDONE_SSL_CERT.crt" # "./xxxxxxxxxxxxxxxxxxx.crt" # Path to your CA certificate file
+
+  devices:
+    main_plug:
+      device_id: "e5ea13c4-6697-4d98-a750-86c3539a0c9e" # YOUR_DEVICE_ID
+      component: "main"
 
 power:
-  controller: smartthings
-  device: main_plug
+  controller: "smartthings"
+  device: "main_plug"
 
 aging:
-  max_count: 10
+  max_count: 10000
   power_off_delay_sec: 5
   boot_wait_sec: 0
   interval_sec: 3
@@ -41,4 +47,4 @@ ilitek:
     - "input:"
 
 report:
-  save_dir: reports
+  save_dir: "reports"
