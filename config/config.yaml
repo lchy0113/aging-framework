@@ -9,10 +9,10 @@ power:
   device: main_plug
 
 aging:
-  max_count: 10
-  power_off_delay_sec: 5
+  max_count: 100000
+  power_off_delay_sec: 10
   boot_wait_sec: 0
-  interval_sec: 3
+  interval_sec: 10
   stop_on_fail: true
 
 serial:

@@ -1,5 +1,6 @@
 import requests
 import urllib3
+import time
 from pathlib import Path
 
 
@@ -92,6 +93,22 @@ class SmartThingsClient:
                 "SmartThings Device Not Found (404)\n"
                 "config/config.yaml의 smartthings.device_id 값을 확인하세요.\n"
                 f"path={path}\n"
+                f"body={response.text}"
+            )
+
+        if response.status_code == 429:
+            retry_after = response.headers.get("Retry-After")
+
+            wait_sec = 5
+            if retry_after:
+                try:
+                    wait_sec = int(retry_after)
+                except ValueError:
+                    pass
+            
+            raise RuntimeError(
+                "SmartThings API Rate Limit Exceeded (429)\n"
+                f"API 호출제한에 걸렸습니다. {wait_sec}초 이상 대기 후 재시도 하세요.\n"
                 f"body={response.text}"
             )
 
