@@ -12,7 +12,7 @@ aging:
   max_count: 100000
   power_off_delay_sec: 10
   boot_wait_sec: 0
-  interval_sec: 10
+  interval_sec: 15
   stop_on_fail: true
 
 serial:
